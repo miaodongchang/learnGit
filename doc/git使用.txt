@@ -1,0 +1,46 @@
+1、以下是一些reset的使用示例（本地commit错误没有push到远程仓库）：
+
+#回退所有内容到上一个版本(HEAD回退add的版本)：git reset HEAD^  
+#回退a.py这个文件的版本到上一个版本：git reset HEAD^ a.py   
+#向前回退到第3个版本：git reset –soft HEAD~3  
+#将本地的状态回退到和远程的一样 ：git reset –hard origin/master  
+#回退到某个版本（--hard回退commit的版本） ，使用git log查询提交日志
+
+2、git revert
+对于已经把代码push到远程仓库,你回退本地代码其实也想同时回退线上代码,回滚到某个指定的版本,线上,线下代码保持一致.你要用到下面的命令
+
+git revert c011eb3c20ba6fb38cc94fe5a8dda366a3990c61
+通常,前几位即可
+git revert c011eb3
+
+git revert用于反转提交,执行revert命令时要求工作树必须是干净的.
+git revert用一个新提交来消除一个历史提交所做的任何修改.
+revert 之后你的本地代码会回滚到指定的历史版本,这时你再 git push 既可以把线上的代码更新.(这里不会像reset造成冲突的问题)
+ 
+revert 使用,需要先找到你想回滚版本唯一的commit标识代码,可以用 git log 或者在adgit搭建的web环境历史提交记录里查看.
+ 
+git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit
+看似达到的效果是一样的,其实完全不同.
+第一:
+上面我们说的如果你已经push到线上代码库, reset 删除指定commit以后,你git push可能导致一大堆冲突.但是revert 并不会.
+第二:
+如果在日后现有分支和历史分支需要合并的时候,reset 恢复部分的代码依然会出现在历史分支里.但是revert 方向提交的commit 并不会出现在历史分支里.
+第三:
+reset 是在正常的commit历史中,删除了指定的commit,这时 HEAD 是向后移动了,而 revert 是在正常的commit历史中再commit一次,只不过是反向提交,他的 HEAD 是一直向前的.
+
+3、添加远程仓库
+   git remote add origin git@github.com:miaodongchang/learnGit.git
+
+   // fork开源项目时设置upstream
+   git remote add upstream https://github.com/user1/repository.git
+然后再输入一遍 git    remote -v输出结果就会变为origin https://github.com/user2/repository.git (fetch)
+   origin https://github.com/user2/repository.git (push)
+upstream    https://github.com/user1/repository.git (push)
+upstream    https://github.com/user1/repository.git (push)
+
+作者：田雅文
+链接：   https://www.zhihu.com/question/27712995/answer/39946123
+来源：知乎
+著作权归作者所有。   商业转载请联系作者获得授权，非商业转载请注明出处。 
+
+4、删除远程及本地分支：git push origin --delete dev
